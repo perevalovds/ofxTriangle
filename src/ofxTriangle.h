@@ -43,6 +43,9 @@ class ofxTriangle {
 #endif
 	void triangulate(vector<ofPoint> contour, int resolution = 50);
 
+	void triangulate_indices(vector<ofPoint> &contour);	//perevalovds
+
+
 	ofPoint getTriangleCenter(ofPoint *tr);
 	bool isPointInsidePolygon(ofPoint *polygon,int N, ofPoint p);
 
@@ -57,6 +60,8 @@ class ofxTriangle {
 
 	int nTriangles;
 	vector <ofxTriangleData> triangles;
+
+	vector<int> tri_indices;	//a,b,c, a,b,c,  a,b,c... - indices
 
 };
 

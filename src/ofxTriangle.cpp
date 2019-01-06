@@ -58,6 +58,35 @@ void ofxTriangle::triangulate(vector<ofPoint> contour, int resolution){
     delete delobject;
 }
 
+void ofxTriangle::triangulate_indices(vector<ofPoint> &contour) {	//perevalovds
+	int n = contour.size();
+
+	vector<Delaunay::Point> v(n);
+
+	for (int i = 0; i < n; i++) {
+		v[i][0] = contour[i].x;
+		v[i][1] = contour[i].y;
+	}
+
+	delobject = new Delaunay(v);
+	delobject->Triangulate();
+
+	tri_indices.clear();
+
+	Delaunay::fIterator fit;
+	for (fit = delobject->fbegin(); fit != delobject->fend(); ++fit) {
+		int pta = delobject->Org(fit);
+		int ptb = delobject->Dest(fit);
+		int ptc = delobject->Apex(fit);
+		tri_indices.push_back(pta);
+		tri_indices.push_back(ptb);
+		tri_indices.push_back(ptc);
+	}
+
+	delete delobject;
+
+}
+
 void ofxTriangle::clear(){
     triangles.clear();
     nTriangles = 0;
