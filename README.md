@@ -1,3 +1,6 @@
+It's fork from obviousjim/ofxTriangle addon.
+
+
 ofxTriangle
 -----------
 - Given a set of points from a complex polygon, triangulates the points of the smallest number of triangles required to fill that polygon.
