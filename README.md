@@ -1,4 +1,4 @@
-It's fork from obviousjim/ofxTriangle addon.
+It's extended fork from obviousjim/ofxTriangle addon.
 
 
 ofxTriangle
