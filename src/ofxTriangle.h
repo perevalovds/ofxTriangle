@@ -44,8 +44,11 @@ class ofxTriangle {
 
 	//Create indices 'tri_indices' of triangles from input points 'contour'
 	//POINT - expected to have .x,.y, so it can be ofPoint, ofVec2f, glm::vec2, glm::vec3
-	template<class POINT>
-	void triangulate_indices(const vector<POINT> &contour) {
+	//T = int, unsigned int; indices goes as a,b,c, a,b,c,  a,b,c...
+	//to set them to ofMesh, use T = unsigned int.
+
+	template<class POINT, class T>
+	void triangulate_indices(const vector<POINT> &contour, vector<T> tri_indices) {
 		int n = contour.size();
 
 		vector<Delaunay::Point> v(n);
@@ -143,7 +146,6 @@ class ofxTriangle {
 	int nTriangles;
 	vector <ofxTriangleData> triangles;
 
-	vector<int> tri_indices;	//a,b,c, a,b,c,  a,b,c... - indices
 
 };
 
