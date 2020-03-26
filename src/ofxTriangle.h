@@ -41,6 +41,40 @@ class ofxTriangle {
 	// Triangulate a openCV blob
 	void triangulate(ofxCvBlob &cvblob, int resolution = 50);
 #endif
+
+	//Create indices 'tri_indices' of triangles from input points 'contour'
+	//POINT - expected to have .x,.y, so it can be ofPoint, ofVec2f, glm::vec2, glm::vec3
+	template<class POINT>
+	void triangulate_indices(const vector<POINT> &contour) {
+		int n = contour.size();
+
+		vector<Delaunay::Point> v(n);
+
+		for (int i = 0; i < n; i++) {
+			v[i][0] = contour[i].x;
+			v[i][1] = contour[i].y;
+		}
+
+		delobject = new Delaunay(v);
+		delobject->Triangulate();
+
+		tri_indices.clear();
+
+		Delaunay::fIterator fit;
+		for (fit = delobject->fbegin(); fit != delobject->fend(); ++fit) {
+			int pta = delobject->Org(fit);
+			int ptb = delobject->Dest(fit);
+			int ptc = delobject->Apex(fit);
+			tri_indices.push_back(pta);
+			tri_indices.push_back(ptb);
+			tri_indices.push_back(ptc);
+		}
+
+		delete delobject;
+	}
+
+
+	//Create triangulation 'triangles' which includes points coordinates and triangle area
 	//POINT - expected to have .x,.y, so it can be ofPoint, ofVec2f, glm::vec2, glm::vec3
 	template<class POINT>
 	void triangulate(const vector<POINT> &contour, int resolution = 50) {
@@ -93,37 +127,6 @@ class ofxTriangle {
 
 		delete delobject;
 	}
-
-	//POINT - expected to have .x,.y, so it can be ofPoint, ofVec2f, glm::vec2, glm::vec3
-	template<class POINT>
-	void triangulate_indices(const vector<POINT> &contour) {
-		int n = contour.size();
-
-		vector<Delaunay::Point> v(n);
-
-		for (int i = 0; i < n; i++) {
-			v[i][0] = contour[i].x;
-			v[i][1] = contour[i].y;
-		}
-
-		delobject = new Delaunay(v);
-		delobject->Triangulate();
-
-		tri_indices.clear();
-
-		Delaunay::fIterator fit;
-		for (fit = delobject->fbegin(); fit != delobject->fend(); ++fit) {
-			int pta = delobject->Org(fit);
-			int ptb = delobject->Dest(fit);
-			int ptc = delobject->Apex(fit);
-			tri_indices.push_back(pta);
-			tri_indices.push_back(ptb);
-			tri_indices.push_back(ptc);
-		}
-
-		delete delobject;
-	}
-
 
 	ofPoint getTriangleCenter(ofPoint *tr);
 	bool isPointInsidePolygon(const ofPoint *polygon,int N, ofPoint p);
